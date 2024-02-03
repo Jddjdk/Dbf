@@ -1,2 +1,90 @@
-<iframe id="innerFrame" name="innerFrame" sandbox="allow-scripts allow-popups allow-forms allow-same-origin allow-popups-to-escape-sandbox allow-downloads allow-storage-access-by-user-activation" frameborder="11" allowfullscreen="" src="https://658364f33098fa67e3d5c0c1--cheery-bienenstitch-f6f91a.netlify.app/games/subwaysurfers/" style="overflow: auto;">
-</iframe>
+import pygame
+import sys
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Set up game window
+width, height = 800, 600
+window = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Slope Game")
+
+# Define colors
+white = (255, 255, 255)
+black = (0, 0, 0)
+
+# Player variables
+ball_radius = 20
+ball_x = width // 2
+ball_y = 50
+ball_speed = 5
+
+# Slope variables
+slope_width = 400
+slope_height = 20
+slope_angle = 30  # Angle of the slope in degrees
+slope_color = (50, 150, 50)
+
+# Obstacle variables
+obstacle_width = 50
+obstacle_height = 50
+obstacle_speed = 5
+obstacle_color = (150, 50, 50)
+
+# Clock to control the frame rate
+clock = pygame.time.Clock()
+
+def draw_slope():
+    slope_rect = pygame.Rect(0, height - slope_height, slope_width, slope_height)
+    pygame.draw.rect(window, slope_color, slope_rect)
+
+def draw_ball():
+    pygame.draw.circle(window, black, (ball_x, ball_y), ball_radius)
+
+def draw_obstacle(obstacle_x, obstacle_y):
+    obstacle_rect = pygame.Rect(obstacle_x, obstacle_y, obstacle_width, obstacle_height)
+    pygame.draw.rect(window, obstacle_color, obstacle_rect)
+
+# Game loop
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT] and ball_x > 0:
+        ball_x -= ball_speed
+    if keys[pygame.K_RIGHT] and ball_x < width:
+        ball_x += ball_speed
+
+    # Update obstacle position
+    obstacle_y += obstacle_speed
+    if obstacle_y > height:
+        obstacle_y = 0
+        obstacle_x = random.randint(0, width - obstacle_width)
+
+    # Check for collisions with the slope
+    on_slope = (
+        ball_x > slope_x
+        and ball_x < slope_x + slope_width
+        and ball_y + ball_radius > height - slope_height
+    )
+
+    if not on_slope:
+        ball_y += ball_speed
+
+    # Check for collisions with the obstacle
+    if (
+        ball_x < obstacle_x + obstacle_width
+        and ball_x + ball_radius > obstacle_x
+        and ball_y < obstacle_y + obstacle_height
+        and ball_y + ball_radius > obstacle_y
+    ):
+        print("Game Over!")
+        pygame.quit()
+        sys.exit()
+
+    # Draw everything
+    window.fill(whit
