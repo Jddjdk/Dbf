@@ -1,1 +1,1 @@
-Unblock Game OvO Go Here https://tybsi.github.io/school/
+Unblock Game OvO Go Here https://tybsi.github.io/OvO/
